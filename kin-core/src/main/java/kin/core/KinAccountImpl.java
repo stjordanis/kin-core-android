@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import java.math.BigDecimal;
 import kin.core.exception.AccountDeletedException;
+import kin.core.exception.CryptoException;
 import kin.core.exception.OperationFailedException;
 import org.stellar.sdk.KeyPair;
 
@@ -11,15 +12,18 @@ import org.stellar.sdk.KeyPair;
 final class KinAccountImpl extends AbstractKinAccount {
 
     private final KeyPair account;
+    private final BackupRestore backupRestore;
     private final TransactionSender transactionSender;
     private final AccountActivator accountActivator;
     private final AccountInfoRetriever accountInfoRetriever;
     private final BlockchainEvents blockchainEvents;
     private boolean isDeleted = false;
 
-    KinAccountImpl(KeyPair account, TransactionSender transactionSender, AccountActivator accountActivator,
+    KinAccountImpl(KeyPair account, BackupRestore backupRestore, TransactionSender transactionSender,
+        AccountActivator accountActivator,
         AccountInfoRetriever accountInfoRetriever, BlockchainEventsCreator blockchainEventsCreator) {
         this.account = account;
+        this.backupRestore = backupRestore;
         this.transactionSender = transactionSender;
         this.accountActivator = accountActivator;
         this.accountInfoRetriever = accountInfoRetriever;
@@ -70,18 +74,13 @@ final class KinAccountImpl extends AbstractKinAccount {
     }
 
     @Override
-    public ListenerRegistration addBalanceListener(@NonNull EventListener<Balance> listener) {
-        return blockchainEvents.addBalanceListener(listener);
+    public BlockchainEvents blockchainEvents() {
+        return blockchainEvents;
     }
 
     @Override
-    public ListenerRegistration addPaymentListener(@NonNull EventListener<PaymentInfo> listener) {
-        return blockchainEvents.addPaymentListener(listener);
-    }
-
-    @Override
-    public ListenerRegistration addAccountCreationListener(EventListener<Void> listener) {
-        return blockchainEvents.addAccountCreationListener(listener);
+    public String export(@NonNull String passphrase) throws CryptoException {
+        return backupRestore.exportWallet(account, passphrase);
     }
 
     void markAsDeleted() {

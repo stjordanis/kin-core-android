@@ -49,13 +49,12 @@ public class PaymentListenerActivity extends BaseActivity {
     private void startListener() {
         startBtn.setEnabled(false);
         stopBtn.setEnabled(true);
-        listenerRegistration = account
+        listenerRegistration = account.blockchainEvents()
             .addPaymentListener(paymentInfo -> runOnUiThread(() -> addPaymentToUi(paymentInfo)));
     }
 
     private void addPaymentToUi(PaymentInfo paymentInfo) {
-        @SuppressLint("InflateParams") View paymentView = LayoutInflater.from(this)
-            .inflate(R.layout.payment_info, null);
+        View paymentView = LayoutInflater.from(this).inflate(R.layout.payment_info, null);
         TextView destinationText = paymentView.findViewById(R.id.to_public_id);
         TextView sourceText = paymentView.findViewById(R.id.from_public_id);
         TextView amountText = paymentView.findViewById(R.id.amount);

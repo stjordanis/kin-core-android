@@ -329,7 +329,7 @@ public class KinClientTest {
         String url = "My awesome Horizon server";
         Environment environment = new Environment(url, Environment.TEST.getNetworkPassphrase(), Environment.TEST.getIssuerAccountId());
         kinClient = new KinClient(environment, fakeKeyStore, mockTransactionSender, mockAccountActivator,
-            mockAccountInfoRetriever, mockBlockchainEventsCreator);
+            mockAccountInfoRetriever, mockBlockchainEventsCreator, new FakeBackupRestore());
         Environment actualEnvironment = kinClient.getEnvironment();
 
         assertNotNull(actualEnvironment);
@@ -404,7 +404,8 @@ public class KinClientTest {
 
     @NonNull
     private KinClient createNewKinClient() {
-        return new KinClient(fakeEnvironment, fakeKeyStore, mockTransactionSender, mockAccountActivator,
-            mockAccountInfoRetriever, mockBlockchainEventsCreator);
+        return new KinClient(fakeEnvironment, fakeKeyStore,
+            mockTransactionSender, mockAccountActivator,
+            mockAccountInfoRetriever, mockBlockchainEventsCreator, new FakeBackupRestore());
     }
 }

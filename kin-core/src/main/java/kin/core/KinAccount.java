@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import java.math.BigDecimal;
 import kin.core.exception.AccountNotActivatedException;
 import kin.core.exception.AccountNotFoundException;
+import kin.core.exception.CryptoException;
 import kin.core.exception.InsufficientKinException;
 import kin.core.exception.OperationFailedException;
 import kin.core.exception.TransactionFailedException;
@@ -143,26 +144,15 @@ public interface KinAccount {
     Request<Integer> getStatus();
 
     /**
-     * Creates and adds listener for balance changes of this account, use returned {@link ListenerRegistration} to
-     * stop listening. <p><b>Note:</b> Events will be fired on background thread.</p>
-     *
-     * @param listener listener object for payment events
+     * Returns {@link BlockchainEvents} object, allows registering to various events on the blockchain network.
      */
-    ListenerRegistration addBalanceListener(@NonNull final EventListener<Balance> listener);
+    BlockchainEvents blockchainEvents();
 
     /**
-     * Creates and adds listener for payments concerning this account, use returned {@link ListenerRegistration} to
-     * stop listening. <p><b>Note:</b> Events will be fired on background thread.</p>
+     * Export the account data as a JSON string. The seed is encrypted.
      *
-     * @param listener listener object for payment events
+     * @param passphrase The passphrase with which to encrypt the seed
+     * @return A JSON representation of the data as a string
      */
-    ListenerRegistration addPaymentListener(@NonNull final EventListener<PaymentInfo> listener);
-
-    /**
-     * Creates and adds listener for account creation event, use returned {@link ListenerRegistration} to stop
-     * listening. <p><b>Note:</b> Events will be fired on background thread.</p>
-     *
-     * @param listener listener object for payment events
-     */
-    ListenerRegistration addAccountCreationListener(final EventListener<Void> listener);
+    String export(@NonNull String passphrase) throws CryptoException;
 }

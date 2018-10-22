@@ -22,7 +22,7 @@ import org.stellar.sdk.responses.TransactionResponse;
 /**
  * Provides listeners, for various events happens on the blockchain.
  */
-class BlockchainEvents {
+public class BlockchainEvents {
 
     private static final String CURSOR_FUTURE_ONLY = "now";
     private final Server server;
@@ -41,7 +41,7 @@ class BlockchainEvents {
      *
      * @param listener listener object for payment events
      */
-    ListenerRegistration addBalanceListener(@NonNull final EventListener<Balance> listener) {
+    public ListenerRegistration addBalanceListener(@NonNull final EventListener<Balance> listener) {
         checkNotNull(listener, "listener");
         ServerSentEvent serverSentEvent = server
             .transactions()
@@ -93,7 +93,7 @@ class BlockchainEvents {
      *
      * @param listener listener object for payment events
      */
-    ListenerRegistration addPaymentListener(@NonNull final EventListener<PaymentInfo> listener) {
+    public ListenerRegistration addPaymentListener(@NonNull final EventListener<PaymentInfo> listener) {
         checkNotNull(listener, "listener");
         ServerSentEvent serverSentEvent = server
             .transactions()
@@ -114,7 +114,7 @@ class BlockchainEvents {
      *
      * @param listener listener object for payment events
      */
-    ListenerRegistration addAccountCreationListener(final EventListener<Void> listener) {
+    public ListenerRegistration addAccountCreationListener(final EventListener<Void> listener) {
         checkNotNull(listener, "listener");
         ServerSentEvent serverSentEvent = server.transactions()
             .forAccount(accountKeyPair)

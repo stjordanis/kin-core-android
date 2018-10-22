@@ -48,11 +48,12 @@ class OnBoarding {
             fireOnFailure(callbacks, new TimeoutException("Waiting for account creation event time out"));
         };
 
-        listenerRegistration = account.addAccountCreationListener(data -> {
-            listenerRegistration.remove();
-            handler.removeCallbacks(accountCreationListeningTimeout);
-            activateAccount(account, callbacks);
-        });
+        listenerRegistration = account.blockchainEvents()
+            .addAccountCreationListener(data -> {
+                listenerRegistration.remove();
+                handler.removeCallbacks(accountCreationListeningTimeout);
+                activateAccount(account, callbacks);
+            });
         handler.postDelayed(accountCreationListeningTimeout, 10 * DateUtils.SECOND_IN_MILLIS);
         createAccount(account, callbacks);
     }
